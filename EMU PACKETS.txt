@@ -1,0 +1,41 @@
+                switch (msgId) {
+                    case 206:
+                        let msg = new ServerMessage(257);
+                        msg.AppendInt32(9);
+                        msg.AppendInt32(0);
+                        msg.AppendInt32(0);
+                        msg.AppendInt32(1);
+                        msg.AppendInt32(1);
+                        msg.AppendInt32(3);
+                        msg.AppendInt32(0);
+                        msg.AppendInt32(2);
+                        msg.AppendInt32(1);
+                        msg.AppendInt32(4);
+                        msg.AppendInt32(1);
+                        msg.AppendInt32(5);
+                        msg.AppendStringWithBreak("dd-MM-yyyy", 2);
+                        msg.AppendInt32(7);
+                        msg.AppendBoolean(false);
+                        msg.AppendInt32(8);
+                        msg.AppendStringWithBreak("/client", 2);
+                        msg.AppendInt32(9);
+                        msg.AppendBoolean(false);
+                        const tt = Uint8Array.from(msg.GetBytes());
+                        console.log("msg : " + msg.GetBytes());
+                        socket.write(tt);
+                        break;
+                    case 415:
+                        const sso = cliMsg.PopFixedStringE("ASCII");
+                        const msg2 = new ServerMessage(2);
+                        msg2.AppendInt32(1);
+                        msg2.AppendStringWithBreak("fuse_use_wardrobe", 2);
+                        console.log("sso : " + sso);
+                        const ttt = Uint8Array.from(msg2.GetBytes());
+                        console.log("msg : " + msg2.GetBytes());
+                        socket.write(ttt);
+                        const msg3 = new ServerMessage(3);
+                        const tttt = Uint8Array.from(msg3.GetBytes());
+                        console.log("msg : " + msg3.GetBytes());
+                        socket.write(tttt);
+                        break;
+                }
