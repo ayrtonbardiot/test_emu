@@ -12,7 +12,6 @@ export class CreditBalanceComposer extends MessageComposer {
         this._serverMessage.AppendStringWithBreak("10050.0"); // creedits
 
         const byteArray = Uint8Array.from(this._serverMessage.GetBytes());
-        console.log(byteArray);
         this._socket.write(byteArray);
     }
 }

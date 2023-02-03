@@ -1,20 +1,24 @@
 import {MessageComposer} from "../MessageComposer";
 import {Socket} from "net";
 import {Outgoing} from "../Outgoing";
+import {GameClient} from "../../../GameClient";
 
 export class UserObjectComposer extends MessageComposer {
 
-    constructor(socket: Socket) {
+    private _gameClient: GameClient;
+
+    constructor(socket: Socket, gameClient: GameClient) {
         super(socket, Outgoing.UserObjectComposer);
+        this._gameClient = gameClient;
     }
 
     public compose(): void {
-        this._serverMessage.AppendStringWithBreak("1");
-        this._serverMessage.AppendStringWithBreak("notaryz");
-        this._serverMessage.AppendStringWithBreak("hr-115-42.hd-195-19.ch-3030-82.lg-275-1408.fa-1201.ca-1804-64");
-        this._serverMessage.AppendStringWithBreak("M");
-        this._serverMessage.AppendStringWithBreak("NotaEMU");
-        this._serverMessage.AppendStringWithBreak("notaryz");
+        this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data._id.toString());
+        this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data.username);
+        this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data.look);
+        this._serverMessage.AppendStringWithBreak("M"); // sex
+        this._serverMessage.AppendStringWithBreak("NotaEMU"); // custom data
+        this._serverMessage.AppendStringWithBreak("notaryz"); // realName
         this._serverMessage.AppendInt32(0); // direct  mail
         this._serverMessage.AppendInt32(10); // respect TOTAL
         this._serverMessage.AppendInt32(10); // respect left

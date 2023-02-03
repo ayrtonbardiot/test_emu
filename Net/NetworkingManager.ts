@@ -6,6 +6,12 @@ import {ServerMessage} from "../Messages/Outgoing/ServerMessage";
 import {PacketManager} from "../Messages/PacketManager";
 import {Log} from "../Utils/Log";
 import {Emulator} from "../Emulator";
+import {v4} from "uuid";
+import {GameClient} from "../GameClient";
+
+class Socket extends net.Socket {
+    id?: string;
+}
 
 export class NetworkingManager {
 
@@ -16,7 +22,10 @@ export class NetworkingManager {
     constructor(port: number) {
         this._port = port;
         this._server = net.createServer().listen({port: this._port});
-        this._server.on("connection", (socket: net.Socket) => {
+        this._server.on("connection", (socket: Socket) => {
+            socket.id = v4();
+            const gameClient = new GameClient(socket, null);
+            Emulator.gameClientManager.addUser(gameClient);
             socket.on("data", ((data: Buffer) => this.onMessage(socket, data)));
         });
         NetworkingManager._instance = this;

@@ -45,13 +45,11 @@ export class ServerMessage {
     public AppendString(s: string): void {
             const textencoder = new TextEncoder();
             this.AppendBytes(Array.from(textencoder.encode(s)));
-            console.log(Array.from(textencoder.encode(s)))
     }
 
     public AppendStringWithBreak(s: string) {
         const breakchar: number = 2;
         this.AppendString(s);
-
         this.AppendByte(breakchar);
     }
 

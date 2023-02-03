@@ -7,7 +7,7 @@ import {UserObjectComposer} from "../../Outgoing/User/UserObjectComposer";
 
 export class InfoRetrieveMessageEvent extends MessageEvent {
     handle(): void {
-        const msg = new UserObjectComposer(this._socket);
+        const msg = new UserObjectComposer(this._socket, this._gameClient);
         msg.compose();
     }
 }

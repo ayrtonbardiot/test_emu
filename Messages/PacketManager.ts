@@ -1,12 +1,14 @@
 import {ClientMessage} from "./Incoming/ClientMessage";
 import {InitCryptoMessageEvent} from "./Incoming/Handshake/InitCryptoMessageEvent";
-import { MessageEvent } from "./Incoming/MessageEvent";
+import {MessageEvent} from "./Incoming/MessageEvent";
 import {Socket} from "net";
 import {Log} from "../Utils/Log";
 import {SSOTicketMessageEvent} from "./Incoming/Handshake/SSOTicketMessageEvent";
 import {Incoming} from "./Incoming/Incoming";
 import {InfoRetrieveMessageEvent} from "./Incoming/Handshake/InfoRetrieveMessageEvent";
 import {GetCreditsInfoMessageEvent} from "./Incoming/User/GetCreditsInfoMessageEvent";
+import {Emulator} from "../Emulator";
+import {GameClient} from "../GameClient";
 
 export class PacketManager {
     private static _instance: PacketManager;
@@ -32,12 +34,28 @@ export class PacketManager {
     }
 
     public handlePacket(socket: Socket, clientMessage: ClientMessage): void {
+        // const packet: MessageEvent = this.GetPacket(clientMessage.header) as unknown as MessageEvent;
+        // const user: GameClient | null = Emulator.userManager.getUserBySocket(socket);
+        // if (packet) {
+        //     if (user) {
+        //         // @ts-ignore
+        //         new packet(socket, clientMessage, user).handle();
+        //     } else {
+        //         Log.error("PacketManager - user not found");
+        //     }
+        // } else {
+        //     Log.error(`PacketManager - unknown packet header: ${clientMessage.header}`);
+        // }
+
         const packet: MessageEvent = this.GetPacket(clientMessage.header) as unknown as MessageEvent;
+        const user: GameClient | null = Emulator.gameClientManager.getUserBySocket(socket);
         if (packet) {
-            // @ts-ignore
-            new packet(socket, clientMessage).handle();
-        } else {
-            Log.error(`PacketManager - unknown packet header: ${clientMessage.header}`);
+            if (user) {
+                // @ts-ignore
+                new packet(socket, clientMessage, user).handle();
+            } else {
+                Log.error("PacketManager - user not found");
+            }
         }
     }
 }
