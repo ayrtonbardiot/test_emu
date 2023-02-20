@@ -2,8 +2,9 @@ import {NetworkingManager} from "./Net/NetworkingManager";
 import {PacketManager} from "./Messages/PacketManager";
 import {Log} from "./Utils/Log";
 import {DatabaseManager} from "./Database/DatabaseManager";
-import dotenv from "dotenv";
-import {GameClientManager} from "./GameClientManager";
+import {GameClientManager} from "./GameClient/GameClientManager";
+import {NavigatorManager} from "./Navigator/NavigatorManager";
+import * as dotenv from "dotenv";
 
 export class Emulator {
 
@@ -12,6 +13,7 @@ export class Emulator {
     private static _databaseManager: DatabaseManager | undefined;
     private static _instance: Emulator | undefined;
     private static _gameClientManager: GameClientManager | undefined;
+    private static _navigatorManager: NavigatorManager | undefined;
 
     constructor() {
         this.init();
@@ -24,6 +26,7 @@ export class Emulator {
         Emulator._networkingManager = new NetworkingManager(3000);
         Emulator._packetManager = new PacketManager();
         Emulator._gameClientManager = new GameClientManager();
+        Emulator._navigatorManager = new NavigatorManager();
         Emulator._instance = this;
     }
 
@@ -41,5 +44,9 @@ export class Emulator {
 
     public static get gameClientManager(): GameClientManager {
         return Emulator._gameClientManager!;
+    }
+
+    public static get navigatorManager(): NavigatorManager {
+        return Emulator._navigatorManager!;
     }
 }

@@ -1,6 +1,4 @@
-import {Users} from "./Database/Models/Users";
-import {Loaded} from "@mikro-orm/core";
-import net from "node:net";
+import * as net from "node:net";
 import {Habbo} from "./Habbo";
 
 class Socket extends net.Socket {

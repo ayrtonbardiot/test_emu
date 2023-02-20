@@ -1,6 +1,6 @@
 import {Socket} from "net";
 import {ClientMessage} from "./ClientMessage";
-import {GameClient} from "../../GameClient";
+import {GameClient} from "../../GameClient/GameClient";
 
 export abstract class MessageEvent {
 

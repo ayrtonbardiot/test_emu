@@ -7,7 +7,7 @@ import {CreditBalanceComposer} from "../../Outgoing/User/CreditBalanceComposer";
 
 export class GetCreditsInfoMessageEvent extends MessageEvent {
     handle(): void {
-        const msg = new CreditBalanceComposer(this._socket);
+        const msg = new CreditBalanceComposer(this._socket, this._gameClient);
         msg.compose();
     }
 }

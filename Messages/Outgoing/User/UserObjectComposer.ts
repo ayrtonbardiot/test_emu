@@ -1,7 +1,7 @@
 import {MessageComposer} from "../MessageComposer";
 import {Socket} from "net";
 import {Outgoing} from "../Outgoing";
-import {GameClient} from "../../../GameClient";
+import {GameClient} from "../../../GameClient/GameClient";
 
 export class UserObjectComposer extends MessageComposer {
 
@@ -13,7 +13,7 @@ export class UserObjectComposer extends MessageComposer {
     }
 
     public compose(): void {
-        this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data._id.toString());
+        this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data.id.toString());
         this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data.username);
         this._serverMessage.AppendStringWithBreak(this._gameClient.habbo.data.look);
         this._serverMessage.AppendStringWithBreak("M"); // sex

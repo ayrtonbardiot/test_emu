@@ -1,11 +1,16 @@
-import {EntityManager, MikroORM} from "@mikro-orm/core";
-import {MongoDriver} from "@mikro-orm/mongodb";
 import {Log} from "../Utils/Log";
-import {throws} from "assert";
+import {Connection, createConnection} from "mysql2/promise";
+import {AppDataSource} from "./data-source";
+import {DataSource, Repository} from "typeorm";
+import {Room} from "./entity/Room";
+import {Emulator} from "../Emulator";
+import {User} from "./entity/User";
 
 export class DatabaseManager {
 
-    private _orm: MikroORM | undefined;
+    private _dataSource: DataSource;
+    private _roomsRepository: Repository<Room>;
+    private _userRepository: Repository<User>;
 
     constructor() {
         this.init().then(() => {
@@ -17,19 +22,22 @@ export class DatabaseManager {
     }
 
     private async init(): Promise<void> {
-        this._orm = await MikroORM.init<MongoDriver>({
-            entities: ['../dist/Database/Models/**/*.js'],
-            entitiesTs: ['./Database/Models/**/*.ts'],
-            dbName: 'habbo',
-            clientUrl: process.env.MONGO_URL,
-            type: 'mongo',
-            allowGlobalContext: true,
-        }).catch((reason) => {
-            throw new Error(reason);
+        this._dataSource = await AppDataSource.initialize().catch((reason) => {
+            throw reason;
         });
+        this._roomsRepository = this._dataSource.getRepository(Room);
+        this._userRepository = this._dataSource.getRepository(User);
     }
 
-    public get orm(): EntityManager {
-        return this._orm?.em!;
+    public get dataSource(): DataSource {
+        return this._dataSource;
+    }
+
+    public get roomsRepository(): Repository<Room> {
+        return this._roomsRepository;
+    }
+
+    public get userRepository(): Repository<User> {
+        return this._userRepository;
     }
 }

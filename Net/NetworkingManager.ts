@@ -1,13 +1,11 @@
-import net from "node:net";
-import Buffer from "buffer";
+import * as net from "node:net";
+import { Buffer } from "buffer";
 import {Base64Encoding} from "../Messages/Base64";
 import {ClientMessage} from "../Messages/Incoming/ClientMessage";
-import {ServerMessage} from "../Messages/Outgoing/ServerMessage";
-import {PacketManager} from "../Messages/PacketManager";
 import {Log} from "../Utils/Log";
 import {Emulator} from "../Emulator";
 import {v4} from "uuid";
-import {GameClient} from "../GameClient";
+import {GameClient} from "../GameClient/GameClient";
 
 class Socket extends net.Socket {
     id?: string;

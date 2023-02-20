@@ -15,4 +15,8 @@ export class Log {
     public static warn(message: string): void {
         console.warn(ASCIIColors.FgYellow + "[WARN] " + ASCIIColors.RESET + message);
     }
+
+    public static debug(message: string): void {
+        console.debug(ASCIIColors.FgBlue + "[DEBUG] " + ASCIIColors.RESET + message);
+    }
 }

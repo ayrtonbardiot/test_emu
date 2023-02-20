@@ -8,7 +8,12 @@ import {Incoming} from "./Incoming/Incoming";
 import {InfoRetrieveMessageEvent} from "./Incoming/Handshake/InfoRetrieveMessageEvent";
 import {GetCreditsInfoMessageEvent} from "./Incoming/User/GetCreditsInfoMessageEvent";
 import {Emulator} from "../Emulator";
-import {GameClient} from "../GameClient";
+import {GameClient} from "../GameClient/GameClient";
+import {MyRoomsSearchMessageEvent} from "./Incoming/Navigator/MyRoomsSearchMessageEvent";
+import {CanCreateRoomMessageEvent} from "./Incoming/Navigator/CanCreateRoomMessageEvent";
+import {CreateFlatMessageEvent} from "./Incoming/Navigator/CreateFlatMessageEvent";
+import {OpenFlatConnectionMessageEvent} from "./Incoming/Navigator/OpenFlatConnectionMessageEvent";
+import {PopularRoomsSearchMessageEvent} from "./Incoming/Navigator/PopularRoomsSearchMessageEvent";
 
 export class PacketManager {
     private static _instance: PacketManager;
@@ -26,6 +31,13 @@ export class PacketManager {
         this._packets.set(Incoming.SSOTicketMessageEvent, SSOTicketMessageEvent);
         this._packets.set(Incoming.InfoRetrieveMessageEvent, InfoRetrieveMessageEvent);
         this._packets.set(Incoming.GetCreditsInfoMessageEvent, GetCreditsInfoMessageEvent);
+        // this._packets.set(Incoming.GetOfficialRoomsMessageEvent, GetOfficialRoomsMessageEvent);
+        this._packets.set(Incoming.PopularRoomsSearchMessageEvent, PopularRoomsSearchMessageEvent);
+        this._packets.set(Incoming.MyRoomsSearchMessageEvent, MyRoomsSearchMessageEvent);
+        this._packets.set(Incoming.CanCreateRoomMessageEvent, CanCreateRoomMessageEvent);
+
+        this._packets.set(Incoming.CreateFlatMessageEvent, CreateFlatMessageEvent);
+        this._packets.set(Incoming.OpenFlatConnectionMessageEvent, OpenFlatConnectionMessageEvent);
         Log.info(`PacketManager - registered ${this._packets.size} packets`);
     }
 
@@ -50,12 +62,15 @@ export class PacketManager {
         const packet: MessageEvent = this.GetPacket(clientMessage.header) as unknown as MessageEvent;
         const user: GameClient | null = Emulator.gameClientManager.getUserBySocket(socket);
         if (packet) {
+            Log.debug(`PacketManager - received packet: ${clientMessage.header}`);
             if (user) {
                 // @ts-ignore
                 new packet(socket, clientMessage, user).handle();
             } else {
                 Log.error("PacketManager - user not found");
             }
+        } else {
+            Log.error(`PacketManager - unknown packet header: ${clientMessage.header}`);
         }
     }
 }

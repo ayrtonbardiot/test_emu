@@ -1,7 +1,10 @@
 import {GameClient} from "./GameClient";
-import net from "node:net";
-import {Log} from "./Utils/Log";
+import * as net from "node:net";
+import {Log} from "../Utils/Log";
 import {Habbo} from "./Habbo";
+import {Emulator} from "../Emulator";
+import {User} from "../Database/entity/User";
+import {Repository} from "typeorm";
 
 class Socket extends net.Socket {
     id?: string;
